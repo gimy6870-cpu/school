@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f4">
+  <meta name="description" content="기숙사 벌점을 기록하고, 확인한 생활 규정에 따라 상황을 정리하는 도우미입니다.">
+  <title>기숙사 벌점 길잡이</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="기숙사 벌점 길잡이 홈">
+        <span class="brand-mark" aria-hidden="true">ㅂ</span>
+        <span>기숙사 <strong>벌점 길잡이</strong></span>
+      </a>
+      <div class="local-badge"><span class="status-dot"></span> 내 기기에서만 저장</div>
+    </header>
+
+    <main>
+      <section class="intro" id="home">
+        <div>
+          <p class="eyebrow">BUSAN MECHANICAL TECHNICAL HIGH SCHOOL · DORM LIFE</p>
+          <h1>벌점, 차근차근<br><span>확인하고 정리해요.</span></h1>
+          <p class="intro-copy">내가 입력한 기록을 모아보고, 확인한 규정에 맞춰 상황을 정리해 보세요.</p>
+        </div>
+        <div class="intro-art" aria-hidden="true">
+          <span class="art-sun"></span><span class="art-building"></span>
+          <span class="art-window one"></span><span class="art-window two"></span><span class="art-window three"></span>
+          <span class="art-star">✳</span>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="주요 메뉴" role="tablist">
+        <button class="tab active" id="tab-record" role="tab" aria-selected="true" aria-controls="panel-record" data-panel="record">내 벌점 기록</button>
+        <button class="tab" id="tab-review" role="tab" aria-selected="false" aria-controls="panel-review" data-panel="review">규정 검토 도우미</button>
+        <button class="tab" id="tab-guide" role="tab" aria-selected="false" aria-controls="panel-guide" data-panel="guide">이용 안내</button>
+      </nav>
+
+      <section class="panel" id="panel-record" role="tabpanel" aria-labelledby="tab-record">
+        <section class="identity-gate card" id="identity-gate" aria-labelledby="identity-title">
+          <div class="gate-icon" aria-hidden="true">⌂</div>
+          <span class="section-kicker">STUDENT CHECK</span>
+          <h2 id="identity-title">내 벌점을 확인하려면</h2>
+          <p>이름과 기숙사 호실을 입력해 주세요. 이 브라우저에 해당 정보로 저장한 기록을 보여드려요.</p>
+          <form id="identity-form" class="identity-form">
+            <div class="identity-field"><label for="identity-name">이름</label><input id="identity-name" type="text" maxlength="30" autocomplete="name" placeholder="이름 입력" required></div>
+            <div class="identity-field"><label for="identity-room">기숙사 호실</label><input id="identity-room" type="text" maxlength="20" autocomplete="off" placeholder="예: 301호" required></div>
+            <button class="button button-primary identity-submit" type="submit">내 벌점 확인 <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="identity-notice">현재는 이름·호실 입력값을 인증하거나 학교 공식 기록을 조회하지 않습니다. 점수는 이 브라우저에 직접 입력한 기록입니다.</p>
+        </section>
+
+        <div id="score-content" hidden>
+        <div class="profile-strip"><span id="active-identity"></span><button class="button button-outline" id="switch-identity" type="button">다른 정보로 확인</button></div>
+        <div class="score-card">
+          <div class="score-copy">
+            <span class="section-kicker">MY DORM SCORE</span>
+            <h2>나의 누적 벌점</h2>
+            <p>공식 기록과 대조해 최신 상태로 관리해 주세요.</p>
+          </div>
+          <div class="score-value"><strong id="total-score">0</strong><span>점</span></div>
+          <div class="score-baseline">
+            <label for="baseline-score">이미 받은 누적 점수</label>
+            <div class="baseline-control"><input id="baseline-score" type="number" min="0" step="1" value="0" inputmode="numeric"><span>점</span><button class="button button-small" id="save-baseline" type="button">점수 저장</button></div>
+          </div>
+          <span class="score-decoration" aria-hidden="true">✳</span>
+        </div>
+
+        <div class="content-grid">
+          <section class="card entry-card">
+            <div class="card-heading"><div><span class="section-kicker">QUICK NOTE</span><h2>새 기록 추가</h2></div><span class="heading-icon" aria-hidden="true">＋</span></div>
+            <p class="muted">벌점을 받은 내역을 기록해 누적 점수를 관리해요.</p>
+            <form id="record-form" class="form-stack">
+              <label for="record-title">기록 내용</label>
+              <input id="record-title" type="text" maxlength="80" placeholder="예: 점호 시간 지각" required>
+              <div class="field-row">
+                <div class="field-grow"><label for="record-points">벌점</label><div class="input-suffix"><input id="record-points" type="number" min="1" max="100" step="1" placeholder="예: 1" required><span>점</span></div></div>
+                <div class="field-grow"><label for="record-date">날짜</label><input id="record-date" type="date" required></div>
+              </div>
+              <button class="button button-primary full-button" type="submit">기록 추가 <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="privacy-note"><span aria-hidden="true">▣</span> 기록은 이 브라우저에만 저장돼요.</p>
+          </section>
+
+          <section class="card history-card">
+            <div class="card-heading"><div><span class="section-kicker">RECENT ACTIVITY</span><h2>벌점 기록</h2></div><span class="count-pill" id="record-count">0건</span></div>
+            <div id="record-list" class="record-list" aria-live="polite"></div>
+            <div id="empty-records" class="empty-state"><span class="empty-icon" aria-hidden="true">✎</span><strong>아직 기록이 없어요</strong><span>벌점 내역을 추가하면 여기에 표시돼요.</span></div>
+          </section>
+        </div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="panel-review" role="tabpanel" aria-labelledby="tab-review" hidden>
+        <div class="review-intro">
+          <div><span class="section-kicker">RULE CHECK</span><h2>규정과 상황을 함께 살펴봐요</h2><p>공식 규정 문구와 실제 있었던 일을 입력하면, 사감 선생님께 설명할 내용을 정리해 드려요.</p></div>
+          <span class="review-icon" aria-hidden="true">✳</span>
+        </div>
+        <div class="review-grid">
+          <form id="review-form" class="card review-form">
+            <div class="form-heading"><span class="step-number">01</span><div><h3>확인한 규정</h3><p>생활 규정의 해당 항목을 그대로 붙여 넣어 주세요.</p></div></div>
+            <label for="rule-text">규정 내용 <span class="optional">필수</span></label>
+            <textarea id="rule-text" rows="4" maxlength="1500" placeholder="예: [공식 규정에서 확인한 조항을 입력]" required></textarea>
+            <div class="form-heading second-step"><span class="step-number">02</span><div><h3>실제 있었던 일</h3><p>추측이나 변명보다 확인 가능한 사실을 적어 주세요.</p></div></div>
+            <label for="behavior-text">내 행동과 상황 <span class="optional">필수</span></label>
+            <textarea id="behavior-text" rows="3" maxlength="1000" placeholder="언제, 어디서, 어떤 일이 있었나요?" required></textarea>
+            <label for="facts-text">덧붙일 사실 또는 확인할 점 <span class="optional">선택</span></label>
+            <textarea id="facts-text" rows="3" maxlength="1000" placeholder="예: 당시 전달받은 안내, 목격자, 아직 확인하지 못한 내용 등"></textarea>
+            <button class="button button-primary full-button" type="submit">상황 정리하기 <span aria-hidden="true">→</span></button>
+          </form>
+          <aside class="review-side">
+            <div class="trust-card"><span class="trust-icon" aria-hidden="true">◎</span><h3>정확한 규정이 먼저예요</h3><p>현재 등록된 공식 벌점표가 없으므로 이 도구가 벌점이나 위반 여부를 확정할 수는 없어요. 학교 공지나 사감 선생님에게 최신 규정을 확인해 주세요.</p></div>
+            <div class="result-card" id="review-result" aria-live="polite" hidden>
+              <div class="result-title"><span class="result-mark" aria-hidden="true">✓</span><div><span class="section-kicker">REVIEW NOTES</span><h3>상담 준비 메모</h3></div></div>
+              <div id="result-content"></div>
+              <button class="button button-outline full-button" id="copy-result" type="button">메모 복사하기 <span aria-hidden="true">▢</span></button>
+              <p class="copy-feedback" id="copy-feedback" aria-live="polite"></p>
+            </div>
+            <div class="truth-card"><span aria-hidden="true">“</span><p>잘못한 점은 인정하고, 오해가 있다면 사실을 차분히 설명하는 게 가장 도움이 돼요.</p></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+        <div class="guide-header"><span class="section-kicker">HOW IT WORKS</span><h2>필요한 정보를 차근차근 정리해요</h2><p>이 도구는 생활 기록과 선생님께 드릴 설명을 준비하는 보조 도구예요.</p></div>
+        <div class="guide-grid">
+          <article class="card guide-card"><span class="guide-number">01</span><h3>누적 점수 확인</h3><p>이름과 기숙사 호실을 입력하면 이 브라우저에 해당 조합으로 저장된 누적 점수와 기록이 표시돼요. 점수는 직접 입력해 관리합니다.</p></article>
+          <article class="card guide-card"><span class="guide-number">02</span><h3>규정 문구 확인</h3><p>학교에서 안내한 최신 기숙사 생활 규정의 해당 조항을 입력하세요. 기억에 의존해 점수를 추정하지 않는 것이 좋아요.</p></article>
+          <article class="card guide-card"><span class="guide-number">03</span><h3>사실대로 설명</h3><p>상황 정리 결과를 상담 준비에 활용하세요. 실제와 다른 변명이나 사실을 만들어 내는 데 사용하지 말고, 모르는 점은 모른다고 적어 주세요.</p></article>
+        </div>
+        <div class="notice-box"><span aria-hidden="true">i</span><p><strong>개인정보 안내</strong><br>이름·호실과 벌점 기록은 이 브라우저의 로컬 저장소에 보관됩니다. 입력창은 실제 학생 인증이나 학교 서버 조회 기능이 아니므로, 공용 기기에서는 개인정보를 입력하지 마세요.</p></div>
+      </section>
+    </main>
+
+    <footer class="footer"><span>기숙사 벌점 길잡이</span><span>공식 기록 및 최신 규정은 학교에 확인하세요.</span></footer>
+  </div>
+</body>
+</html>
