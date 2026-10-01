@@ -17,7 +17,7 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 .app-shell { width: min(1112px, calc(100% - 48px)); margin: 0 auto; }
 .topbar { height: 78px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9ebe6; }
@@ -50,7 +50,8 @@ h1 span { color: var(--green); }
 .identity-gate > p:not(.identity-notice) { margin: 0 0 19px; color: var(--muted); font-size: 11px; line-height: 1.7; }
 .identity-form { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 12px; }
 .identity-field { display: flex; flex-direction: column; gap: 7px; }
-.identity-field input { width: 100%; }
+.identity-field[hidden] { display: none; }
+.identity-field input, .identity-field select { width: 100%; }
 .identity-submit { grid-column: 1 / -1; margin-top: 1px; }
 .identity-notice { margin: 13px 0 0; color: #8b968e; font-size: 10px; line-height: 1.7; }
 .profile-strip { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; color: #738078; font-size: 11px; }
@@ -79,10 +80,10 @@ h1 span { color: var(--green); }
 .muted { margin: 9px 0 18px; color: var(--muted); font-size: 11px; }
 .form-stack { display: flex; flex-direction: column; gap: 8px; }
 label { color: #3f4c45; font-size: 11px; font-weight: 600; }
-input, textarea { min-width: 0; border: 1px solid #e5e9e4; border-radius: 6px; color: var(--ink); background: white; font-size: 12px; outline: none; }
-input { min-height: 37px; padding: 0 10px; }
+input, textarea, select { min-width: 0; border: 1px solid #e5e9e4; border-radius: 6px; color: var(--ink); background: white; font-size: 12px; outline: none; }
+input, select { min-height: 37px; padding: 0 10px; }
 textarea { width: 100%; padding: 10px 11px; line-height: 1.7; resize: vertical; }
-input:focus, textarea:focus { border-color: #76a18b; box-shadow: 0 0 0 3px #e9f2eb; }
+input:focus, textarea:focus, select:focus { border-color: #76a18b; box-shadow: 0 0 0 3px #e9f2eb; }
 input::placeholder, textarea::placeholder { color: #abb4ae; }
 .field-row { display: flex; gap: 12px; margin-top: 4px; }
 .field-grow { display: flex; flex: 1; flex-direction: column; gap: 8px; min-width: 0; }
@@ -110,8 +111,8 @@ input::placeholder, textarea::placeholder { color: #abb4ae; }
 .empty-state strong { margin: 9px 0 4px; color: #66736b; font-size: 12px; }
 .empty-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: #7c9c85; background: #f0f5ef; font-size: 17px; }
 .review-intro { display: flex; justify-content: space-between; align-items: center; margin-bottom: 19px; }
-.review-intro h2, .guide-header h2 { margin: 7px 0 6px; font-size: 22px; letter-spacing: -.05em; }
-.review-intro p, .guide-header p { margin: 0; color: var(--muted); font-size: 12px; }
+.review-intro h2 { margin: 7px 0 6px; font-size: 22px; letter-spacing: -.05em; }
+.review-intro p { margin: 0; color: var(--muted); font-size: 12px; }
 .review-icon { color: #d9b45f; font-size: 50px; }
 .review-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 16px; align-items: start; }
 .review-form { padding: 23px; }
@@ -121,9 +122,27 @@ input::placeholder, textarea::placeholder { color: #abb4ae; }
 .form-heading p { margin: 0; color: #8a958e; font-size: 10px; }
 .review-form > label { display: block; margin: 0 0 7px; }
 .optional { margin-left: 5px; color: #90a096; font-size: 9px; font-weight: 400; }
+.field-hint { margin: -3px 0 4px; color: #87938a; font-size: 9px; line-height: 1.6; }
 .second-step { margin-top: 21px; }
 .review-form textarea + label { margin-top: 15px; }
 .review-form .button { margin-top: 16px; }
+.rule-list-help { display: flex; justify-content: space-between; gap: 10px; margin: 7px 0 8px; color: #8a958e; font-size: 9px; }
+.rule-list-help span:first-child { color: #53745f; font-weight: 700; white-space: nowrap; }
+.rule-list { max-height: 350px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #e5e9e4; border-radius: 7px; background: #fbfcfa; }
+.rule-group-heading { position: sticky; z-index: 1; top: 0; margin: 0; padding: 9px 11px; border-bottom: 1px solid #e7ece6; color: #46634f; background: #eff5ef; font-size: 10px; line-height: 1.5; }
+.rule-option { display: flex; width: 100%; flex-direction: column; gap: 4px; padding: 9px 11px; border: 0; border-bottom: 1px solid #eef1ed; color: var(--ink); background: transparent; text-align: left; }
+.rule-option:hover, .rule-option:focus-visible { outline: none; background: #f0f6f0; }
+.rule-option.selected { box-shadow: inset 3px 0 var(--green); background: #eaf3eb; }
+.rule-option-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rule-option-text { font-size: 11px; line-height: 1.65; }
+.rule-penalty { display: inline-block; width: max-content; padding: 3px 7px; border-radius: 999px; color: #8c5739; background: #fbf0e7; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.rule-penalty[hidden] { display: none; }
+.rule-empty { margin: 0; padding: 20px 12px; color: #7c8780; text-align: center; font-size: 11px; }
+.selected-rule { margin-top: 10px; padding: 12px; border: 1px solid #dfe9df; border-radius: 7px; background: #f4f8f3; }
+.selected-rule p { margin: 6px 0; color: #44544a; font-size: 11px; line-height: 1.75; }
+.rule-source { display: block; color: #87938a; font-size: 9px; line-height: 1.6; }
+.rule-source-link { margin: 8px 0 0; color: #87938a; font-size: 9px; line-height: 1.6; }
+.rule-source-link a { color: #477052; text-underline-offset: 2px; }
 .review-side { display: flex; flex-direction: column; gap: 13px; }
 .trust-card, .result-card { padding: 20px; border: 1px solid #e8ece7; border-radius: 11px; background: white; }
 .trust-icon { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 9px; color: var(--green); background: var(--mint); font-size: 19px; }
@@ -142,16 +161,6 @@ input::placeholder, textarea::placeholder { color: #abb4ae; }
 .button-outline { min-height: 36px; border: 1px solid #dce5dc; color: #41634c; background: white; }
 .button-outline:hover { background: #f4f8f4; }
 .copy-feedback { min-height: 13px; margin: 7px 0 0; color: #588067; text-align: center; font-size: 10px; }
-.guide-header { margin: 6px 0 22px; }
-.guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.guide-card { min-height: 173px; padding: 21px; }
-.guide-number { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: var(--green); background: var(--mint); font-size: 10px; font-weight: 700; }
-.guide-card h3 { margin: 15px 0 7px; font-size: 13px; }
-.guide-card p { margin: 0; color: #79847d; font-size: 11px; line-height: 1.85; }
-.notice-box { display: flex; gap: 12px; align-items: flex-start; margin-top: 16px; padding: 16px; border: 1px solid #e5ebe3; border-radius: 9px; color: #69806d; background: #f0f5ef; }
-.notice-box > span { display: grid; place-items: center; width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%; color: white; background: #829e81; font-size: 12px; font-weight: 700; }
-.notice-box p { margin: 0; font-size: 10px; line-height: 1.8; }
-.notice-box strong { color: #425e47; font-size: 11px; }
 .footer { display: flex; justify-content: space-between; padding: 17px 0 23px; border-top: 1px solid var(--line); color: #929b95; font-size: 10px; }
 
 @media (max-width: 700px) {
@@ -181,13 +190,12 @@ input::placeholder, textarea::placeholder { color: #abb4ae; }
   .entry-card, .history-card { min-height: unset; padding: 19px; }
   .history-card { min-height: 250px; }
   .empty-state { min-height: 170px; }
-  .review-intro h2, .guide-header h2 { font-size: 19px; }
-  .review-intro p, .guide-header p { max-width: 330px; line-height: 1.7; }
+  .review-intro h2 { font-size: 19px; }
+  .review-intro p { max-width: 330px; line-height: 1.7; }
   .review-icon { font-size: 38px; }
   .review-form { padding: 19px; }
-  .guide-grid { grid-template-columns: 1fr; gap: 10px; }
-  .guide-card { min-height: 0; padding: 17px; }
-  .guide-card h3 { margin-top: 11px; }
+  .rule-list { max-height: 320px; }
+  .rule-list-help { flex-direction: column; gap: 3px; }
   .footer { gap: 12px; font-size: 9px; }
 }
 

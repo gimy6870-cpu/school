@@ -36,7 +36,6 @@
       <nav class="tabs" aria-label="주요 메뉴" role="tablist">
         <button class="tab active" id="tab-record" role="tab" aria-selected="true" aria-controls="panel-record" data-panel="record">내 벌점 기록</button>
         <button class="tab" id="tab-review" role="tab" aria-selected="false" aria-controls="panel-review" data-panel="review">규정 검토 도우미</button>
-        <button class="tab" id="tab-guide" role="tab" aria-selected="false" aria-controls="panel-guide" data-panel="guide">이용 안내</button>
       </nav>
 
       <section class="panel" id="panel-record" role="tabpanel" aria-labelledby="tab-record">
@@ -44,13 +43,15 @@
           <div class="gate-icon" aria-hidden="true">⌂</div>
           <span class="section-kicker">STUDENT CHECK</span>
           <h2 id="identity-title">내 벌점을 확인하려면</h2>
-          <p>이름과 기숙사 호실을 입력해 주세요. 이 브라우저에 해당 정보로 저장한 기록을 보여드려요.</p>
+          <p>이름과 기숙사 동·서관, 호실을 선택해 주세요. 입력한 정보로 이 브라우저에 저장된 기록을 보여드려요.</p>
           <form id="identity-form" class="identity-form">
             <div class="identity-field"><label for="identity-name">이름</label><input id="identity-name" type="text" maxlength="30" autocomplete="name" placeholder="이름 입력" required></div>
-            <div class="identity-field"><label for="identity-room">기숙사 호실</label><input id="identity-room" type="text" maxlength="20" autocomplete="off" placeholder="예: 301호" required></div>
+            <div class="identity-field"><label for="identity-dorm">기숙사</label><select id="identity-dorm" required><option value="" selected disabled>동관 또는 서관 선택</option><option value="서관">서관</option><option value="동관">동관</option></select></div>
+            <div class="identity-field" id="identity-line-field" hidden><label for="identity-line">동관 라인</label><select id="identity-line" disabled><option value="" selected disabled>A라인 또는 B라인 선택</option><option value="A라인">A라인</option><option value="B라인">B라인</option></select></div>
+            <div class="identity-field"><label for="identity-room">호실</label><input id="identity-room" type="text" maxlength="20" autocomplete="off" placeholder="예: 301" required></div>
             <button class="button button-primary identity-submit" type="submit">내 벌점 확인 <span aria-hidden="true">→</span></button>
           </form>
-          <p class="identity-notice">현재는 이름·호실 입력값을 인증하거나 학교 공식 기록을 조회하지 않습니다. 점수는 이 브라우저에 직접 입력한 기록입니다.</p>
+          <p class="identity-notice">이름·기숙사 선택·호실 입력값을 인증하거나 학교 공식 기록을 조회하지 않습니다. 점수는 이 브라우저에 직접 입력한 기록입니다.</p>
         </section>
 
         <div id="score-content" hidden>
@@ -96,23 +97,34 @@
 
       <section class="panel hidden" id="panel-review" role="tabpanel" aria-labelledby="tab-review" hidden>
         <div class="review-intro">
-          <div><span class="section-kicker">RULE CHECK</span><h2>규정과 상황을 함께 살펴봐요</h2><p>공식 규정 문구와 실제 있었던 일을 입력하면, 사감 선생님께 설명할 내용을 정리해 드려요.</p></div>
+          <div><span class="section-kicker">RULE CHECK</span><h2>규정과 상황을 함께 살펴봐요</h2><p>공식 규정에서 해당 항목을 고르고 실제 있었던 일을 적으면, 사감 선생님께 설명할 내용을 정리해 드려요.</p></div>
           <span class="review-icon" aria-hidden="true">✳</span>
         </div>
         <div class="review-grid">
           <form id="review-form" class="card review-form">
-            <div class="form-heading"><span class="step-number">01</span><div><h3>확인한 규정</h3><p>생활 규정의 해당 항목을 그대로 붙여 넣어 주세요.</p></div></div>
-            <label for="rule-text">규정 내용 <span class="optional">필수</span></label>
-            <textarea id="rule-text" rows="4" maxlength="1500" placeholder="예: [공식 규정에서 확인한 조항을 입력]" required></textarea>
+            <div class="form-heading"><span class="step-number">01</span><div><h3>확인한 규정</h3><p>공식 생활관 규정 목록을 스크롤하거나 검색해 해당 항목을 선택해 주세요.</p></div></div>
+            <label for="rule-search">생활관 규정 선택 <span class="optional">필수 · 한 항목</span></label>
+            <input id="rule-search" type="search" placeholder="규정 내용 검색 (예: 휴대폰, 귀사, 청소)" autocomplete="off">
+            <p class="rule-list-help"><span id="rule-count"></span><span>항목을 누르면 선택한 규정이 아래에 표시됩니다.</span></p>
+            <div id="rule-list" class="rule-list" role="region" aria-label="부산기계공업고등학교 생활관 규정 목록"></div>
+            <input id="rule-text" type="hidden">
+            <div class="selected-rule" id="selected-rule" aria-live="polite">
+              <span class="section-kicker">선택한 규정</span>
+              <p id="selected-rule-text">위 목록에서 검토할 규정을 선택해 주세요.</p>
+              <span id="selected-rule-penalty" class="rule-penalty" hidden></span>
+              <span id="selected-rule-source" class="rule-source"></span>
+            </div>
+            <p class="rule-source-link">출처: 부산기계공업고등학교 <a href="https://school.busanedu.net/upload/bbs/files/2026/hgschl/bmt-h/ntt/1003821/04/32ba0343dc3079b425bf8faa4c0c5be7.pdf" target="_blank" rel="noopener">2026학년도 학교규정집 PDF (2026.4.16.)</a></p>
             <div class="form-heading second-step"><span class="step-number">02</span><div><h3>실제 있었던 일</h3><p>추측이나 변명보다 확인 가능한 사실을 적어 주세요.</p></div></div>
-            <label for="behavior-text">내 행동과 상황 <span class="optional">필수</span></label>
+            <label for="behavior-text">내 행동과 상황 <span class="optional">필수 · 상담용 존댓말로 정리</span></label>
+            <p class="field-hint">적어 주신 사실은 유지하고, 선생님께 말씀드리기 좋은 존댓말 표현으로 정리해요.</p>
             <textarea id="behavior-text" rows="3" maxlength="1000" placeholder="언제, 어디서, 어떤 일이 있었나요?" required></textarea>
             <label for="facts-text">덧붙일 사실 또는 확인할 점 <span class="optional">선택</span></label>
             <textarea id="facts-text" rows="3" maxlength="1000" placeholder="예: 당시 전달받은 안내, 목격자, 아직 확인하지 못한 내용 등"></textarea>
             <button class="button button-primary full-button" type="submit">상황 정리하기 <span aria-hidden="true">→</span></button>
           </form>
           <aside class="review-side">
-            <div class="trust-card"><span class="trust-icon" aria-hidden="true">◎</span><h3>정확한 규정이 먼저예요</h3><p>현재 등록된 공식 벌점표가 없으므로 이 도구가 벌점이나 위반 여부를 확정할 수는 없어요. 학교 공지나 사감 선생님에게 최신 규정을 확인해 주세요.</p></div>
+            <div class="trust-card"><span class="trust-icon" aria-hidden="true">◎</span><h3>공식 규정과 함께 확인해요</h3><p>목록은 학교 홈페이지의 2026학년도 규정집에서 가져왔어요. 생활관 운영 규정 말미에는 2025년 4월 16일 시행으로 표기돼 있습니다. 이 도구는 벌점이나 위반 여부를 확정하지 않으므로, 실제 적용과 최신 내용은 사감 선생님께 확인해 주세요.</p></div>
             <div class="result-card" id="review-result" aria-live="polite" hidden>
               <div class="result-title"><span class="result-mark" aria-hidden="true">✓</span><div><span class="section-kicker">REVIEW NOTES</span><h3>상담 준비 메모</h3></div></div>
               <div id="result-content"></div>
@@ -124,15 +136,6 @@
         </div>
       </section>
 
-      <section class="panel hidden" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
-        <div class="guide-header"><span class="section-kicker">HOW IT WORKS</span><h2>필요한 정보를 차근차근 정리해요</h2><p>이 도구는 생활 기록과 선생님께 드릴 설명을 준비하는 보조 도구예요.</p></div>
-        <div class="guide-grid">
-          <article class="card guide-card"><span class="guide-number">01</span><h3>누적 점수 확인</h3><p>이름과 기숙사 호실을 입력하면 이 브라우저에 해당 조합으로 저장된 누적 점수와 기록이 표시돼요. 점수는 직접 입력해 관리합니다.</p></article>
-          <article class="card guide-card"><span class="guide-number">02</span><h3>규정 문구 확인</h3><p>학교에서 안내한 최신 기숙사 생활 규정의 해당 조항을 입력하세요. 기억에 의존해 점수를 추정하지 않는 것이 좋아요.</p></article>
-          <article class="card guide-card"><span class="guide-number">03</span><h3>사실대로 설명</h3><p>상황 정리 결과를 상담 준비에 활용하세요. 실제와 다른 변명이나 사실을 만들어 내는 데 사용하지 말고, 모르는 점은 모른다고 적어 주세요.</p></article>
-        </div>
-        <div class="notice-box"><span aria-hidden="true">i</span><p><strong>개인정보 안내</strong><br>이름·호실과 벌점 기록은 이 브라우저의 로컬 저장소에 보관됩니다. 입력창은 실제 학생 인증이나 학교 서버 조회 기능이 아니므로, 공용 기기에서는 개인정보를 입력하지 마세요.</p></div>
-      </section>
     </main>
 
     <footer class="footer"><span>기숙사 벌점 길잡이</span><span>공식 기록 및 최신 규정은 학교에 확인하세요.</span></footer>
